@@ -23,12 +23,6 @@
 </head>
 <body>
 
-<!-- ===== LOADING SCREEN ===== -->
-<div id="loading-screen">
-  <div class="loader-logo">🍿 PIPOCAFLIX</div>
-  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-</div>
-
 <!-- ===== HEADER ===== -->
 <header id="header">
   <a href="index.html" class="nav-logo">🍿 PIPOCAFLIX</a>
@@ -177,13 +171,6 @@ let catalogSeries = [];
 let catalogTudo = [];
 let currentCat = 'todos';
 let currentTab = 'todos';
-
-// ===== LOADING =====
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('loading-screen').classList.add('hidden');
-  }, 1800);
-});
 
 // ===== SCROLL HEADER =====
 const header = document.getElementById('header');

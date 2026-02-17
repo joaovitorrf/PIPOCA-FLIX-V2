@@ -27,8 +27,7 @@ const API = (() => {
 
     try {
       const res = await fetch(PROXY + encodeURIComponent(url), {
-        signal: controller.signal,
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        signal: controller.signal
       });
       clearTimeout(timer);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
