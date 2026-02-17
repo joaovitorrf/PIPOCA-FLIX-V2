@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>PipocaFlix — Filmes e Séries Online</title>
+  <meta name="description" content="Assista filmes e séries online gratuitamente no PipocaFlix. A maior plataforma de streaming do Brasil." />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="PipocaFlix — Filmes e Séries Online" />
+  <meta property="og:type" content="website" />
+
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- CSS Principal -->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+
+  <!-- Social Bar (Monetização) -->
+  <script src="https://pl28456424.effectivegatecpm.com/af/b2/ae/afb2aeef36a1a40f4d3634823ebf0f59.js" type="text/javascript"></script>
+</head>
+<body>
+
+<!-- ===== LOADING SCREEN ===== -->
+<div id="loading-screen">
+  <div class="loader-logo">🍿 PIPOCAFLIX</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header id="header">
+  <a href="index.html" class="nav-logo">🍿 PIPOCAFLIX</a>
+
+  <nav>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html" class="active">Início</a></li>
+      <li><a href="#filmes">Filmes</a></li>
+      <li><a href="#series">Séries</a></li>
+    </ul>
+  </nav>
+
+  <div class="search-wrapper">
+    <span class="search-icon">🔍</span>
+    <input type="search" id="search-input" placeholder="Buscar filmes, séries..." autocomplete="off" />
+    <div id="search-results"></div>
+  </div>
+
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="hero-bg" id="hero-bg" style="background-image: url('');"></div>
+  <div class="hero-content" id="hero-content">
+    <div class="hero-badge" id="hero-badge">🔥 Em destaque</div>
+    <h1 class="hero-title" id="hero-title">Carregando...</h1>
+    <div class="hero-meta" id="hero-meta"></div>
+    <p class="hero-sinopse" id="hero-sinopse"></p>
+    <div class="hero-actions" id="hero-actions"></div>
+  </div>
+</section>
+
+<!-- ===== MAIN ===== -->
+<main id="main-content">
+
+  <!-- Banner Ad (Header) -->
+  <div class="ad-banner">
+    <div class="ad-banner-content">
+      <div id="container-cccc7245f0c46289c4b3a2911da39bca"></div>
+    </div>
+  </div>
+  <script async data-cfasync="false" src="https://pl28456427.effectivegatecpm.com/cccc7245f0c46289c4b3a2911da39bca/invoke.js"></script>
+
+  <!-- Filtros de Categoria -->
+  <div class="category-pills" id="category-pills">
+    <button class="cat-pill active" data-cat="todos">Todos</button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="content-section" style="padding-bottom: 0;">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="todos" onclick="setTab(this, 'todos')">🎬 Todos</button>
+      <button class="tab-btn" data-tab="filmes" onclick="setTab(this, 'filmes')">🎥 Filmes</button>
+      <button class="tab-btn" data-tab="series" onclick="setTab(this, 'series')">📺 Séries</button>
+    </div>
+  </div>
+
+  <!-- Grid Todos -->
+  <section class="content-section" id="section-todos">
+    <div class="section-header">
+      <h2 class="section-title" id="section-todos-title">Todos</h2>
+    </div>
+    <div class="cards-row" id="grid-todos">
+      <!-- Skeletons -->
+      <div class="card skeleton"></div>
+      <div class="card skeleton"></div>
+      <div class="card skeleton"></div>
+      <div class="card skeleton"></div>
+      <div class="card skeleton"></div>
+      <div class="card skeleton"></div>
+      <div class="card skeleton"></div>
+      <div class="card skeleton"></div>
+    </div>
+  </section>
+
+  <!-- Grid Filmes -->
+  <section class="content-section" id="section-filmes" style="display:none;">
+    <div class="section-header">
+      <h2 class="section-title">Filmes</h2>
+    </div>
+    <div class="cards-row" id="grid-filmes"></div>
+  </section>
+
+  <!-- Grid Séries -->
+  <section class="content-section" id="section-series" style="display:none;">
+    <div class="section-header">
+      <h2 class="section-title">Séries</h2>
+    </div>
+    <div class="cards-row" id="grid-series"></div>
+  </section>
+
+  <!-- Ad Entre Seções -->
+  <div class="ad-banner">
+    <div class="ad-banner-content">
+      <div id="container-cccc7245f0c46289c4b3a2911da39bca-2"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer id="footer">
+  <span class="footer-logo">🍿 PIPOCAFLIX</span>
+  <p class="footer-tagline">A melhor experiência de streaming gratuito.</p>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Conteúdo</h4>
+      <a href="#filmes">Filmes</a>
+      <a href="#series">Séries</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="#">Termos de Uso</a>
+      <a href="#">Privacidade</a>
+    </div>
+    <div class="footer-col">
+      <h4>Suporte</h4>
+      <a href="#">Contato</a>
+      <a href="#">FAQ</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 PipocaFlix. Todos os direitos reservados.</span>
+    <span>Feito com 🍿 no Brasil</span>
+  </div>
+</footer>
+
+<!-- Back to top -->
+<button id="back-to-top" title="Voltar ao topo">↑</button>
+
+<!-- JS Modules -->
+<script src="../assets/js/security.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/search.js"></script>
+
+<script>
+// =====================================================
+// INDEX.JS — Lógica principal da homepage
+// =====================================================
+
+let catalogFilmes = [];
+let catalogSeries = [];
+let catalogTudo = [];
+let currentCat = 'todos';
+let currentTab = 'todos';
+
+// ===== LOADING =====
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loading-screen').classList.add('hidden');
+  }, 1800);
+});
+
+// ===== SCROLL HEADER =====
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 50);
+  const backToTop = document.getElementById('back-to-top');
+  backToTop.classList.toggle('visible', window.scrollY > 400);
+}, { passive: true });
+
+document.getElementById('back-to-top').addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ===== HAMBURGER =====
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+
+// ===== GERAR CARD =====
+function criarCard(item) {
+  const tipo = item.tipo || 'filme';
+  const pagina = tipo === 'serie' ? 'serie.html' : 'filme.html';
+  const nome = item.nome || 'Sem título';
+  const capa = item.capa || '';
+  const cat = item.categoria || '';
+  const ano = item.ano || '';
+
+  const card = document.createElement('a');
+  card.className = 'card fade-in';
+  card.href = `${pagina}?nome=${encodeURIComponent(nome)}`;
+  card.innerHTML = `
+    ${capa ? `<img class="card-thumb" src="${capa}" alt="${nome}" loading="lazy" onerror="this.style.display='none'"/>` : ''}
+    <div class="card-overlay">
+      <div class="card-title">${nome}</div>
+      <div class="card-meta">${cat}${cat && ano ? ' • ' : ''}${ano}</div>
+    </div>
+    <div class="card-play">
+      <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </div>
+    <span class="card-badge">${tipo === 'serie' ? '📺 SÉRIE' : '🎬 FILME'}</span>
+  `;
+  return card;
+}
+
+// ===== RENDERIZAR GRID =====
+function renderGrid(items, gridId) {
+  const grid = document.getElementById(gridId);
+  grid.innerHTML = '';
+  if (!items.length) {
+    grid.innerHTML = `
+      <div class="no-content" style="grid-column: 1/-1;">
+        <div style="font-size:3rem;margin-bottom:1rem;">😕</div>
+        <h3>Nada encontrado</h3>
+        <p>Tente outro filtro ou categoria.</p>
+      </div>
+    `;
+    return;
+  }
+  const frag = document.createDocumentFragment();
+  items.forEach(item => frag.appendChild(criarCard(item)));
+  grid.appendChild(frag);
+}
+
+// ===== HERO =====
+function setHero(item) {
+  if (!item) return;
+  const bg = document.getElementById('hero-bg');
+  const title = document.getElementById('hero-title');
+  const meta = document.getElementById('hero-meta');
+  const sinopse = document.getElementById('hero-sinopse');
+  const actions = document.getElementById('hero-actions');
+  const badge = document.getElementById('hero-badge');
+
+  bg.style.backgroundImage = `url('${item.capa || ''}')`;
+  title.textContent = item.nome || '';
+  sinopse.textContent = item.sinopse || '';
+  badge.textContent = item.tipo === 'serie' ? '📺 Série em Destaque' : '🔥 Filme em Destaque';
+
+  meta.innerHTML = `
+    ${item.ano ? `<span>📅 ${item.ano}</span>` : ''}
+    ${item.duracao ? `<span>⏱️ ${item.duracao}</span>` : ''}
+    ${item.categoria ? `<span>🎭 ${item.categoria}</span>` : ''}
+    ${item.audio ? `<span>🔊 ${item.audio}</span>` : ''}
+  `;
+
+  const pagina = item.tipo === 'serie' ? 'serie.html' : 'filme.html';
+  actions.innerHTML = `
+    <a href="${pagina}?nome=${encodeURIComponent(item.nome)}" class="btn-primary">▶ Assistir agora</a>
+    <a href="${pagina}?nome=${encodeURIComponent(item.nome)}" class="btn-secondary">ℹ️ Mais detalhes</a>
+  `;
+}
+
+// ===== CATEGORIAS =====
+function buildCategoryPills(items) {
+  const cats = new Set();
+  items.forEach(item => {
+    if (item.categoria) {
+      item.categoria.split(',').forEach(c => cats.add(c.trim()));
+    }
+  });
+
+  const container = document.getElementById('category-pills');
+  container.innerHTML = '<button class="cat-pill active" data-cat="todos" onclick="filterCat(this,\'todos\')">Todos</button>';
+
+  cats.forEach(cat => {
+    if (!cat) return;
+    const btn = document.createElement('button');
+    btn.className = 'cat-pill';
+    btn.dataset.cat = cat;
+    btn.textContent = cat;
+    btn.onclick = function() { filterCat(this, cat); };
+    container.appendChild(btn);
+  });
+}
+
+function filterCat(btn, cat) {
+  document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentCat = cat;
+  applyFilters();
+}
+
+// ===== TABS =====
+function setTab(btn, tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentTab = tab;
+  document.getElementById('section-todos').style.display = tab === 'todos' ? '' : 'none';
+  document.getElementById('section-filmes').style.display = tab === 'filmes' ? '' : 'none';
+  document.getElementById('section-series').style.display = tab === 'series' ? '' : 'none';
+  applyFilters();
+}
+
+// ===== APLICAR FILTROS =====
+function applyFilters() {
+  const filterItems = (arr) => {
+    if (currentCat === 'todos') return arr;
+    return arr.filter(item =>
+      item.categoria && item.categoria.toLowerCase().includes(currentCat.toLowerCase())
+    );
+  };
+
+  const titulo = currentCat === 'todos' ? 'Todos os Conteúdos' : currentCat;
+  const todosEl = document.getElementById('section-todos-title');
+  if (todosEl) todosEl.textContent = titulo;
+
+  renderGrid(filterItems(catalogTudo), 'grid-todos');
+  renderGrid(filterItems(catalogFilmes), 'grid-filmes');
+  renderGrid(filterItems(catalogSeries), 'grid-series');
+}
+
+// ===== BUSCA =====
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+searchInput.addEventListener('input', (e) => {
+  const val = e.target.value.trim();
+  if (!val) {
+    searchResults.classList.remove('active');
+    return;
+  }
+  Search.query(val);
+});
+
+searchInput.addEventListener('focus', (e) => {
+  if (e.target.value.trim()) searchResults.classList.add('active');
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.search-wrapper')) {
+    searchResults.classList.remove('active');
+  }
+});
+
+// ===== INICIALIZAR BUSCA =====
+function initSearch(catalog) {
+  Search.init(catalog, (results, query) => {
+    if (!query) {
+      searchResults.classList.remove('active');
+      return;
+    }
+    if (!results.length) {
+      searchResults.innerHTML = `<div style="padding:1.2rem;text-align:center;color:var(--text-muted);font-size:.85rem;">Nenhum resultado para "<strong>${query}</strong>"</div>`;
+    } else {
+      searchResults.innerHTML = results.slice(0, 8).map(item => {
+        const pagina = item.tipo === 'serie' ? 'serie.html' : 'filme.html';
+        return `
+          <a class="search-item" href="${pagina}?nome=${encodeURIComponent(item.nome)}">
+            ${item.capa ? `<img class="search-item-thumb" src="${item.capa}" alt="${item.nome}" loading="lazy"/>` : ''}
+            <div class="search-item-info">
+              <div class="search-item-title">${item.nome}</div>
+              <div class="search-item-meta">${item.ano || ''}${item.ano && item.categoria ? ' • ' : ''}${item.categoria || ''}</div>
+            </div>
+            <span class="search-item-type">${item.tipo === 'serie' ? 'SÉRIE' : 'FILME'}</span>
+          </a>
+        `;
+      }).join('');
+    }
+    searchResults.classList.add('active');
+  });
+}
+
+// ===== MAIN INIT =====
+async function init() {
+  try {
+    const { filmes, series } = await API.getTudo();
+
+    catalogFilmes = filmes;
+    catalogSeries = series;
+    catalogTudo = [...filmes, ...series];
+
+    // Hero com item aleatório
+    if (catalogTudo.length) {
+      const featured = catalogTudo[Math.floor(Math.random() * Math.min(10, catalogTudo.length))];
+      setHero(featured);
+    }
+
+    // Renderizar grids
+    renderGrid(catalogTudo, 'grid-todos');
+    renderGrid(catalogFilmes, 'grid-filmes');
+    renderGrid(catalogSeries, 'grid-series');
+
+    // Categorias
+    buildCategoryPills(catalogTudo);
+
+    // Busca
+    initSearch(catalogTudo);
+
+  } catch (err) {
+    console.warn('[PipocaFlix] Erro ao inicializar:', err);
+    ['grid-todos', 'grid-filmes', 'grid-series'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = `
+        <div class="no-content" style="grid-column:1/-1">
+          <div style="font-size:2rem">⚠️</div>
+          <h3>Erro ao carregar</h3>
+          <p>Verifique sua conexão e recarregue a página.</p>
+        </div>
+      `;
+    });
+  }
+}
+
+init();
+</script>
+</body>
+</html>

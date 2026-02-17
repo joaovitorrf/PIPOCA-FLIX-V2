@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Série — PipocaFlix</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+
+  <!-- Social Bar -->
+  <script src="https://pl28456424.effectivegatecpm.com/af/b2/ae/afb2aeef36a1a40f4d3634823ebf0f59.js" type="text/javascript"></script>
+
+  <style>
+    body { padding-top: 68px; }
+    .serie-layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem);
+    }
+    .breadcrumb {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--red-primary); }
+
+    .serie-top {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      margin-bottom: 2.5rem;
+      align-items: start;
+    }
+    @media (max-width: 680px) { .serie-top { grid-template-columns: 1fr; } }
+
+    .serie-poster {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 0 40px rgba(229,9,20,0.5), var(--shadow-card);
+      display: block;
+      transition: transform var(--transition-med);
+    }
+    .serie-poster:hover { transform: scale(1.02); }
+    .serie-info h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1;
+      letter-spacing: 2px;
+      color: var(--red-primary);
+      text-shadow: 0 0 30px var(--red-glow);
+      margin-bottom: 1rem;
+    }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+    }
+    .meta-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .meta-chip.highlight {
+      background: var(--red-soft);
+      border-color: var(--border-red);
+      color: var(--red-hover);
+    }
+    .sinopse-box {
+      background: linear-gradient(135deg, rgba(229,9,20,0.06) 0%, var(--bg-card) 100%);
+      border: 1px solid var(--border-red);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: inset 0 0 20px rgba(229,9,20,0.05);
+    }
+    .sinopse-box h3 { font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--red-primary); margin-bottom: 0.6rem; }
+    .sinopse-box p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8; }
+
+    /* Temporadas */
+    .temporadas-section {
+      margin-bottom: 2rem;
+    }
+    .temporadas-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .temporadas-section h3::before { content:''; width:4px; height:1.2em; background:var(--red-primary); border-radius:2px; display:block; }
+
+    .temp-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+    .temp-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all var(--transition-fast);
+      font-family: var(--font-body);
+    }
+    .temp-btn:hover { background: var(--red-soft); border-color: var(--border-red); color: var(--text-primary); }
+    .temp-btn.active { background: var(--red-primary); border-color: var(--red-primary); color: white; box-shadow: var(--shadow-glow-sm); }
+
+    /* Episódios */
+    .episodios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .ep-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.8rem;
+      text-align: left;
+      transition: all var(--transition-fast);
+      font-family: var(--font-body);
+      line-height: 1.3;
+    }
+    .ep-btn:hover { background: var(--red-soft); border-color: var(--border-red); color: var(--text-primary); }
+    .ep-btn.playing { background: var(--red-primary); border-color: var(--red-primary); color: white; box-shadow: var(--shadow-glow-sm); }
+    .ep-num { font-size: 0.7rem; color: var(--red-primary); font-weight: 700; display: block; margin-bottom: 2px; }
+    .ep-btn.playing .ep-num { color: rgba(255,255,255,0.8); }
+
+    /* PLAYER — EXATAMENTE COMO ESPECIFICADO */
+    .player-container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 1rem auto;
+      background: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255,0,0,0.5);
+    }
+    video { width:100%; display:block; background:#000; object-fit:contain; }
+    .overlay {
+      position:absolute;
+      top:0;left:0;width:100%;height:100%;
+      background:rgba(0,0,0,.6);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      cursor:pointer;
+    }
+    .overlay.hidden { opacity:0; pointer-events:none; }
+    #centerPlay {
+      position:absolute;
+      top:50%;left:50%;
+      transform:translate(-50%,-50%);
+      width:85px;height:85px;
+      border-radius:50%;
+      background:rgba(255,0,0,.85);
+      border:none;
+      cursor:pointer;
+      z-index:10;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:2rem;
+      color:#fff;
+      transition:0.3s;
+    }
+    #centerPlay:hover { transform:translate(-50%,-50%) scale(1.2); background:red; }
+    .controls {
+      position:absolute;
+      bottom:0;
+      width:100%;
+      padding:12px;
+      background:rgba(0,0,0,.55);
+      display:flex;
+      flex-direction:column;
+    }
+    .controls.hidden { opacity:0; }
+    .buttons { display:flex; align-items:center; gap:10px; }
+    .control-btn {
+      background:rgba(255,0,0,.8);
+      border:none;
+      padding:6px;
+      border-radius:6px;
+      cursor:pointer;
+      color:#fff;
+      font-size:1rem;
+    }
+    .title-display { flex:1; text-align:center; font-weight:bold; font-size:14px; }
+    .progress-container { margin-top:8px; display:flex; align-items:center; gap:10px; }
+    .progress { flex:1; height:7px; background:#444; cursor:pointer; }
+    .progress-filled { height:100%; background:red; width:0%; }
+    .time { font-size:12px; width:50px; text-align:center; }
+
+    /* Trailer */
+    .trailer-section { margin: 2.5rem 0; }
+    .trailer-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .trailer-section h3::before { content:''; width:4px; height:1.2em; background:var(--red-primary); border-radius:2px; display:block; }
+    .trailer-container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      aspect-ratio: 16/9;
+      box-shadow: 0 0 30px rgba(255,0,0,0.6);
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    .trailer-container iframe { width:100%; height:100%; border:none; }
+
+    /* Elenco */
+    .elenco-section { margin: 2.5rem 0; }
+    .elenco-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .elenco-section h3::before { content:''; width:4px; height:1.2em; background:var(--red-primary); border-radius:2px; display:block; }
+    .actors-container { display:flex; gap:15px; overflow-x:auto; padding-bottom:10px; }
+    .actors-container::-webkit-scrollbar { display:none; }
+    .actor {
+      flex:0 0 auto; width:80px; height:80px;
+      border-radius:50%; overflow:hidden;
+      box-shadow:0 0 15px rgba(255,0,0,0.5);
+      border:2px solid #ff4d4d;
+      cursor:pointer;
+      transition:transform 0.2s, box-shadow 0.2s;
+    }
+    .actor img { width:100%; height:100%; object-fit:cover; }
+    .actor:hover { transform:scale(1.15); box-shadow:0 0 25px #ff1a1a; }
+
+    @media(max-width:600px) {
+      .episodios-grid { grid-template-columns: 1fr 1fr; }
+      .actor { width:60px; height:60px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header id="header">
+  <a href="index.html" class="nav-logo">🍿 PIPOCAFLIX</a>
+  <nav>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Início</a></li>
+      <li><a href="index.html">Filmes</a></li>
+      <li><a href="index.html" class="active">Séries</a></li>
+    </ul>
+  </nav>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="serie-layout" id="serie-layout">
+  <div id="loading-serie" style="text-align:center; padding: 5rem 2rem; color: var(--text-muted);">
+    <div style="font-size:3rem; margin-bottom:1rem;">📺</div>
+    <p>Carregando série...</p>
+  </div>
+</div>
+
+<!-- Ad Footer -->
+<div class="ad-banner">
+  <div class="ad-banner-content">
+    <div id="container-cccc7245f0c46289c4b3a2911da39bca"></div>
+  </div>
+</div>
+<script async data-cfasync="false" src="https://pl28456427.effectivegatecpm.com/cccc7245f0c46289c4b3a2911da39bca/invoke.js"></script>
+
+<footer id="footer">
+  <span class="footer-logo">🍿 PIPOCAFLIX</span>
+  <div class="footer-bottom">
+    <span>© 2024 PipocaFlix.</span>
+    <a href="index.html" style="color:var(--text-muted);text-decoration:none;">← Voltar ao início</a>
+  </div>
+</footer>
+
+<script src="../assets/js/security.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/player.js"></script>
+
+<script>
+// =====================================================
+// SERIE.JS — Lógica da página de série dinâmica
+// =====================================================
+
+const SMARTLINK = "https://www.effectivegatecpm.com/eacwhk55f?key=87f8fc919fb5d70a825293b5490713dd";
+
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+
+const params = new URLSearchParams(window.location.search);
+const nomeSerie = decodeURIComponent(params.get('nome') || '');
+
+function normalizar(str) {
+  return String(str).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+}
+
+function formatTime(t) {
+  if (isNaN(t) || !isFinite(t)) return '0:00';
+  const m = Math.floor(t / 60);
+  const s = Math.floor(t % 60);
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+// ===== Estado global da série =====
+let temporadaAtual = 1;
+let episodiosPorTemporada = {}; // { 1: [{temporada, episodio, link, nome}], 2: [...] }
+let playerController = null;
+
+// ===== INICIALIZAR PLAYER SÉRIE =====
+function initSeriePlayer() {
+  const video = document.getElementById('video');
+  const overlay = document.getElementById('overlay');
+  const centerPlay = document.getElementById('centerPlay');
+  const controls = document.getElementById('controls');
+  const playerBox = document.getElementById('playerBox');
+  const back10 = document.getElementById('back10');
+  const playPauseBtn = document.getElementById('playPause');
+  const forward10 = document.getElementById('forward10');
+  const fullscreenBtn = document.getElementById('fullscreen');
+  const progress = document.getElementById('progress');
+  const progressFilled = document.getElementById('progressFilled');
+  const currentTimeEl = document.getElementById('currentTime');
+  const totalTimeEl = document.getElementById('totalTime');
+  const playerTitleEl = document.getElementById('playerTitle');
+
+  let isFullscreen = false;
+  let hideTimer;
+
+  // Iniciar playback
+  function iniciar() {
+    overlay.classList.add('hidden');
+    centerPlay.style.opacity = '0';
+    controls.classList.remove('hidden');
+    video.play();
+  }
+  overlay.addEventListener('click', iniciar);
+  centerPlay.addEventListener('click', iniciar);
+
+  playPauseBtn.addEventListener('click', () => {
+    if (video.paused) { video.play(); playPauseBtn.innerHTML = '⏸'; }
+    else { video.pause(); playPauseBtn.innerHTML = '▶'; }
+  });
+  video.addEventListener('play', () => { playPauseBtn.innerHTML = '⏸'; });
+  video.addEventListener('pause', () => { playPauseBtn.innerHTML = '▶'; });
+
+  back10.addEventListener('click', () => { video.currentTime = Math.max(0, video.currentTime - 10); });
+  forward10.addEventListener('click', () => { video.currentTime = Math.min(video.duration, video.currentTime + 10); });
+
+  video.addEventListener('timeupdate', () => {
+    if (!video.duration) return;
+    const pct = (video.currentTime / video.duration) * 100;
+    progressFilled.style.width = pct + '%';
+    currentTimeEl.textContent = formatTime(video.currentTime);
+    totalTimeEl.textContent = formatTime(video.duration);
+  });
+
+  progress.addEventListener('click', e => {
+    const rect = progress.getBoundingClientRect();
+    video.currentTime = (e.clientX - rect.left) / rect.width * video.duration;
+  });
+
+  fullscreenBtn.addEventListener('click', async () => {
+    if (!isFullscreen) {
+      await playerBox.requestFullscreen();
+      if (screen.orientation && screen.orientation.lock) {
+        try { await screen.orientation.lock('landscape'); } catch(e) {}
+      }
+      isFullscreen = true;
+    } else {
+      document.exitFullscreen();
+      isFullscreen = false;
+    }
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) {
+      isFullscreen = false;
+      if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+    }
+  });
+
+  playerBox.addEventListener('mousemove', () => {
+    controls.classList.remove('hidden');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => controls.classList.add('hidden'), 2500);
+  });
+  playerBox.addEventListener('touchstart', () => {
+    controls.classList.remove('hidden');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => controls.classList.add('hidden'), 3000);
+  }, { passive: true });
+
+  // Retorna controlador para carregar episódio
+  return {
+    load(url, titulo) {
+      video.src = url;
+      video.load();
+      if (playerTitleEl) playerTitleEl.textContent = titulo || '';
+      overlay.classList.remove('hidden');
+      centerPlay.style.opacity = '1';
+      centerPlay.innerHTML = '▶';
+      controls.classList.add('hidden');
+      playPauseBtn.innerHTML = '▶';
+    }
+  };
+}
+
+// ===== TOCAR EPISÓDIO (SMARTLINK + PLAYER) =====
+function tocar(ep, nomeSerieText) {
+  const eps = episodiosPorTemporada[temporadaAtual] || [];
+  const episodio = eps.find(e => e.episodio === ep);
+
+  if (!episodio) return;
+
+  // Smartlink ANTES do play (como especificado)
+  window.open(SMARTLINK, '_blank');
+
+  const playerBox = document.getElementById('playerBox');
+  playerBox.style.display = 'block';
+
+  const titulo = `${nomeSerieText} — T${temporadaAtual} EP${ep}`;
+
+  if (playerController) {
+    playerController.load(episodio.link, titulo);
+  }
+
+  // Destacar botão ativo
+  document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('playing'));
+  const activeBtn = document.querySelector(`[data-ep="${ep}"]`);
+  if (activeBtn) activeBtn.classList.add('playing');
+
+  // Scroll para o player
+  setTimeout(() => {
+    playerBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+}
+
+// ===== MOSTRAR EPISÓDIOS DE UMA TEMPORADA =====
+function mostrarTemporada(t, nomeSerieText) {
+  temporadaAtual = t;
+
+  // Atualizar botões de temporada
+  document.querySelectorAll('.temp-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.temp) === t);
+  });
+
+  // Renderizar episódios
+  const eps = episodiosPorTemporada[t] || [];
+  const grid = document.getElementById('episodios-grid');
+  if (!grid) return;
+
+  if (!eps.length) {
+    grid.innerHTML = `<div style="color:var(--text-muted);font-size:.85rem;padding:.5rem;">Nenhum episódio encontrado para esta temporada.</div>`;
+    return;
+  }
+
+  grid.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  eps.forEach(ep => {
+    const btn = document.createElement('button');
+    btn.className = 'ep-btn';
+    btn.dataset.ep = ep.episodio;
+    btn.innerHTML = `<span class="ep-num">EP ${ep.episodio}</span>${ep.nome || `Episódio ${ep.episodio}`}`;
+    btn.addEventListener('click', () => tocar(ep.episodio, nomeSerieText));
+    frag.appendChild(btn);
+  });
+  grid.appendChild(frag);
+}
+
+// ===== AGRUPAR EPISÓDIOS POR TEMPORADA =====
+function agruparEpisodios(episodios, nomeSerie) {
+  const agrupado = {};
+  episodios
+    .filter(ep => normalizar(ep.serie) === normalizar(nomeSerie))
+    .forEach(ep => {
+      const t = ep.temporada || 1;
+      if (!agrupado[t]) agrupado[t] = [];
+      agrupado[t].push(ep);
+    });
+
+  // Ordenar episódios em cada temporada
+  Object.keys(agrupado).forEach(t => {
+    agrupado[t].sort((a, b) => a.episodio - b.episodio);
+  });
+
+  return agrupado;
+}
+
+// ===== RENDERIZAR PÁGINA =====
+function renderSerie(serie, episodios) {
+  document.title = `${serie.nome} — PipocaFlix`;
+
+  episodiosPorTemporada = agruparEpisodios(episodios, serie.nome);
+  const temporadas = Object.keys(episodiosPorTemporada).map(Number).sort((a, b) => a - b);
+
+  // Se não houver episódios no Sheets, cria temporadas pelo campo totalTemporadas
+  if (!temporadas.length && serie.totalTemporadas) {
+    for (let t = 1; t <= serie.totalTemporadas; t++) {
+      episodiosPorTemporada[t] = [];
+      temporadas.push(t);
+    }
+  }
+
+  // Elenco
+  const elencoHtml = serie.elencoNome && serie.elencoNome.length
+    ? `<div class="elenco-section">
+        <h3>🌟 Elenco</h3>
+        <div class="actors-container">
+          ${serie.elencoNome.map((nome, i) => {
+            const foto = serie.elencoFoto[i] || '';
+            return foto ? `<div class="actor" title="${nome}"><img src="${foto}" alt="${nome}" loading="lazy"/></div>` : '';
+          }).join('')}
+        </div>
+      </div>`
+    : '';
+
+  // Trailer
+  let trailerHtml = '';
+  if (serie.trailer) {
+    let tUrl = serie.trailer;
+    const ytMatch = tUrl.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^&\n?#]+)/);
+    if (ytMatch) tUrl = `https://www.youtube.com/embed/${ytMatch[1]}`;
+    trailerHtml = `
+      <div class="trailer-section">
+        <h3>🎞️ Trailer</h3>
+        <div class="trailer-container">
+          <iframe src="${tUrl}" title="Trailer" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    `;
+  }
+
+  // Botões temporada
+  const tempBtnsHtml = temporadas.length
+    ? temporadas.map(t => `
+        <button class="temp-btn ${t === 1 ? 'active' : ''}" data-temp="${t}" onclick="mostrarTemporada(${t}, '${serie.nome.replace(/'/g,"\\'")}')">
+          Temporada ${t}
+        </button>
+      `).join('')
+    : '<span style="color:var(--text-muted);font-size:.85rem;">Sem temporadas disponíveis</span>';
+
+  const layout = document.getElementById('serie-layout');
+  layout.innerHTML = `
+    <div class="breadcrumb">
+      <a href="index.html">🏠 Início</a>
+      <span>›</span>
+      <a href="index.html">Séries</a>
+      <span>›</span>
+      <span>${serie.nome}</span>
+    </div>
+
+    <div class="serie-top">
+      <div>
+        ${serie.capa ? `<img src="${serie.capa}" class="serie-poster" alt="${serie.nome}" />` : ''}
+      </div>
+      <div class="serie-info">
+        <h1>${serie.nome}</h1>
+        <div class="meta-row">
+          ${serie.ano ? `<span class="meta-chip">📅 ${serie.ano}</span>` : ''}
+          ${serie.duracao ? `<span class="meta-chip">⏱️ ${serie.duracao}</span>` : ''}
+          ${serie.categoria ? `<span class="meta-chip highlight">🎭 ${serie.categoria}</span>` : ''}
+          ${serie.totalTemporadas ? `<span class="meta-chip">📦 ${serie.totalTemporadas} Temporada${serie.totalTemporadas > 1 ? 's' : ''}</span>` : ''}
+          ${serie.audio ? `<span class="meta-chip">🔊 ${serie.audio}</span>` : ''}
+        </div>
+        ${serie.sinopse ? `
+          <div class="sinopse-box">
+            <h3>📝 Sinopse</h3>
+            <p>${serie.sinopse}</p>
+          </div>
+        ` : ''}
+      </div>
+    </div>
+
+    <!-- Ad antes do player -->
+    <div style="display:flex;justify-content:center;margin:1rem 0;">
+      <div id="ad-pre-player"></div>
+    </div>
+
+    <!-- Player -->
+    <div class="player-container" id="playerBox" style="display:none;">
+      <video id="video" ${serie.capa ? `poster="${serie.capa}"` : ''} preload="metadata"></video>
+      <div class="overlay" id="overlay">
+        <div style="color:#fff;font-size:1rem;font-weight:bold;">▶ Clique para reproduzir</div>
+      </div>
+      <button id="centerPlay">▶</button>
+      <div class="controls hidden" id="controls">
+        <div class="buttons">
+          <button class="control-btn" id="back10">⏪</button>
+          <button class="control-btn" id="playPause">▶</button>
+          <button class="control-btn" id="forward10">⏩</button>
+          <div class="title-display" id="playerTitle">${serie.nome}</div>
+          <button class="control-btn" id="fullscreen">⛶</button>
+        </div>
+        <div class="progress-container">
+          <span class="time" id="currentTime">0:00</span>
+          <div class="progress" id="progress"><div class="progress-filled" id="progressFilled"></div></div>
+          <span class="time" id="totalTime">0:00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Temporadas -->
+    <div class="temporadas-section">
+      <h3>📦 Temporadas</h3>
+      <div class="temp-btns">${tempBtnsHtml}</div>
+      <h3 style="font-family:var(--font-display);font-size:1.4rem;letter-spacing:1px;margin-bottom:1rem;display:flex;align-items:center;gap:8px;">
+        <span style="width:4px;height:1.2em;background:var(--red-primary);border-radius:2px;display:block;"></span>
+        🎬 Episódios
+      </h3>
+      <div class="episodios-grid" id="episodios-grid"></div>
+    </div>
+
+    ${elencoHtml}
+    ${trailerHtml}
+  `;
+
+  // Inicializar player após render
+  playerController = initSeriePlayer();
+
+  // Carregar episódios da temporada 1
+  if (temporadas.length) mostrarTemporada(temporadas[0], serie.nome);
+}
+
+// ===== INIT =====
+async function init() {
+  if (!nomeSerie) { window.location.href = 'index.html'; return; }
+
+  try {
+    const [series, episodios] = await Promise.all([
+      API.getSeries(),
+      API.getEpisodios()
+    ]);
+
+    const serie = series.find(s => normalizar(s.nome) === normalizar(nomeSerie));
+    document.getElementById('loading-serie').remove();
+
+    if (serie) {
+      renderSerie(serie, episodios);
+    } else {
+      document.getElementById('serie-layout').innerHTML = `
+        <div class="no-content" style="padding:5rem 2rem;">
+          <div style="font-size:3rem;margin-bottom:1rem;">😕</div>
+          <h3>Série não encontrada</h3>
+          <p>Verifique o nome ou <a href="index.html" style="color:var(--red-primary)">volte ao início</a>.</p>
+        </div>
+      `;
+    }
+  } catch (err) {
+    console.error('[PipocaFlix] Erro:', err);
+    document.getElementById('loading-serie').innerHTML = `
+      <div style="text-align:center;padding:3rem;color:var(--text-muted);">
+        <div style="font-size:2rem">⚠️</div>
+        <p>Erro ao carregar. <a href="javascript:location.reload()" style="color:var(--red-primary)">Tentar novamente</a></p>
+      </div>
+    `;
+  }
+}
+
+init();
+</script>
+</body>
+</html>

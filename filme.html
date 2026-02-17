@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Filme — PipocaFlix</title>
+  <meta name="description" content="Assista filmes online gratuitamente no PipocaFlix." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+
+  <!-- Social Bar -->
+  <script src="https://pl28456424.effectivegatecpm.com/af/b2/ae/afb2aeef36a1a40f4d3634823ebf0f59.js" type="text/javascript"></script>
+
+  <style>
+    /* ===== ESTILOS ESPECÍFICOS DA PÁGINA DE FILME ===== */
+    body { padding-top: 68px; }
+
+    .filme-layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem);
+    }
+
+    /* Breadcrumb */
+    .breadcrumb {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--red-primary); }
+
+    /* Layout grid topo */
+    .filme-top {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      margin-bottom: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 680px) {
+      .filme-top { grid-template-columns: 1fr; }
+    }
+
+    .poster-wrapper {
+      position: relative;
+    }
+    .filme-poster {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 0 40px rgba(229,9,20,0.5), var(--shadow-card);
+      display: block;
+      transition: transform var(--transition-med);
+    }
+    .filme-poster:hover { transform: scale(1.02); }
+
+    .filme-info h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1;
+      letter-spacing: 2px;
+      color: var(--red-primary);
+      text-shadow: 0 0 30px var(--red-glow);
+      margin-bottom: 1rem;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 1.2rem;
+    }
+    .meta-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .meta-chip.highlight {
+      background: var(--red-soft);
+      border-color: var(--border-red);
+      color: var(--red-hover);
+    }
+
+    .sinopse-box {
+      background: linear-gradient(135deg, rgba(229,9,20,0.06) 0%, var(--bg-card) 100%);
+      border: 1px solid var(--border-red);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: inset 0 0 20px rgba(229,9,20,0.05);
+    }
+    .sinopse-box h3 { font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--red-primary); margin-bottom: 0.6rem; }
+    .sinopse-box p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8; }
+
+    /* Botão desbloquear */
+    #btnDesbloquear {
+      background: var(--red-primary);
+      color: white;
+      padding: 14px 32px;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      box-shadow: var(--shadow-glow-sm);
+    }
+    #btnDesbloquear:hover:not(:disabled) {
+      background: var(--red-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-glow);
+    }
+    #btnDesbloquear:disabled { opacity: 0.7; cursor: default; transform: none; }
+    .click-progress {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+      margin-bottom: 1rem;
+    }
+    .click-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--bg-card2);
+      border: 2px solid var(--border-red);
+      transition: background var(--transition-fast);
+    }
+    .click-dot.active { background: var(--red-primary); box-shadow: var(--shadow-glow-sm); }
+
+    /* ===== PLAYER — EXATAMENTE COMO ESPECIFICADO ===== */
+    .player-container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: 1rem auto;
+      background: #000;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(255,0,0,0.5);
+    }
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      background: #000;
+    }
+    .player-container:fullscreen video {
+      width: 100vw !important;
+      height: 100vh !important;
+      object-fit: contain !important;
+    }
+    .overlay {
+      position: absolute;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: opacity .3s;
+    }
+    .overlay.hidden { opacity:0; pointer-events:none; }
+    .overlay .logo-img {
+      width: 100px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+    #centerPlay {
+      position:absolute;
+      top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:85px; height:85px;
+      border-radius:50%;
+      background:rgba(255,0,0,0.85);
+      border:none;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      cursor:pointer;
+      transition:0.2s;
+      z-index:10;
+    }
+    #centerPlay:hover { transform:translate(-50%,-50%) scale(1.15); background:red; }
+    #centerPlay svg { width:42px; height:42px; fill:#fff; }
+    .controls {
+      position:absolute;
+      bottom:0;
+      width:100%;
+      padding:12px;
+      background:rgba(0,0,0,0.6);
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      transition: opacity .3s;
+    }
+    .controls.hidden { opacity:0; }
+    .buttons { display:flex; justify-content:center; align-items:center; gap:10px; }
+    button.control-btn {
+      background:rgba(255,0,0,0.85);
+      border:none;
+      padding:6px;
+      border-radius:6px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:0.2s;
+    }
+    button.control-btn:hover { background:red; }
+    .icon { width:27px; height:27px; fill:#fff; }
+    .title-display { flex:1; text-align:center; color:#fff; font-size:15px; font-weight:bold; user-select:none; }
+    .progress-container {
+      margin-top:8px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .progress { flex:1; height:7px; background:#444; border-radius:3px; cursor:pointer; position:relative; }
+    .progress-filled { height:100%; background:red; width:0%; border-radius:3px; }
+    .time { font-size:12px; width:50px; text-align:center; }
+
+    /* Trailer */
+    .trailer-section { margin: 2.5rem 0; }
+    .trailer-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .trailer-section h3::before { content:''; width:4px; height:1.2em; background:var(--red-primary); border-radius:2px; display:block; }
+    .trailer-container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      aspect-ratio: 16/9;
+      box-shadow: 0 0 30px rgba(255,0,0,0.6);
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    .trailer-container iframe { width:100%; height:100%; border:none; }
+
+    /* Elenco */
+    .elenco-section { margin: 2.5rem 0; }
+    .elenco-section h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .elenco-section h3::before { content:''; width:4px; height:1.2em; background:var(--red-primary); border-radius:2px; display:block; }
+    .actors-container {
+      display: flex;
+      gap: 15px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+    .actors-container::-webkit-scrollbar { display:none; }
+    .actor {
+      flex: 0 0 auto;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(255,0,0,0.5);
+      border: 2px solid #ff4d4d;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .actor img { width:100%; height:100%; object-fit:cover; }
+    .actor:hover { transform:scale(1.15); box-shadow:0 0 25px #ff1a1a; }
+
+    @media (max-width:600px) {
+      .icon { width:22px; height:22px; }
+      button.control-btn { padding:4px; }
+      .title-display { font-size:13px; }
+      .actors-container { gap:10px; }
+      .actor { width:60px; height:60px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header id="header">
+  <a href="index.html" class="nav-logo">🍿 PIPOCAFLIX</a>
+  <nav>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Início</a></li>
+      <li><a href="index.html#filmes" class="active">Filmes</a></li>
+      <li><a href="index.html#series">Séries</a></li>
+    </ul>
+  </nav>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- Conteúdo do Filme -->
+<div class="filme-layout" id="filme-layout">
+  <!-- Skeleton/Loading -->
+  <div id="loading-filme" style="text-align:center; padding: 5rem 2rem; color: var(--text-muted);">
+    <div style="font-size:3rem; margin-bottom:1rem;">🎬</div>
+    <p>Carregando filme...</p>
+  </div>
+</div>
+
+<!-- Ad Footer -->
+<div class="ad-banner">
+  <div class="ad-banner-content">
+    <div id="container-cccc7245f0c46289c4b3a2911da39bca"></div>
+  </div>
+</div>
+<script async data-cfasync="false" src="https://pl28456427.effectivegatecpm.com/cccc7245f0c46289c4b3a2911da39bca/invoke.js"></script>
+
+<!-- Footer -->
+<footer id="footer">
+  <span class="footer-logo">🍿 PIPOCAFLIX</span>
+  <div class="footer-bottom">
+    <span>© 2024 PipocaFlix.</span>
+    <a href="index.html" style="color:var(--text-muted);text-decoration:none;">← Voltar ao início</a>
+  </div>
+</footer>
+
+<script src="../assets/js/security.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/player.js"></script>
+
+<script>
+// =====================================================
+// FILME.JS — Lógica da página de filme dinâmica
+// =====================================================
+
+// ===== Scroll header =====
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('nav-links').classList.toggle('open');
+});
+
+// ===== Pegar parâmetro da URL =====
+const params = new URLSearchParams(window.location.search);
+const nomeFilme = decodeURIComponent(params.get('nome') || '');
+
+// ===== Normalizar para comparação =====
+function normalizar(str) {
+  return String(str).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+}
+
+// ===== INICIALIZAR PLAYER =====
+function initPlayer(filme) {
+  // Referências DOM
+  const video = document.getElementById('video');
+  const overlay = document.getElementById('overlay');
+  const centerPlay = document.getElementById('centerPlay');
+  const controls = document.getElementById('controls');
+  const playerBox = document.getElementById('playerBox');
+  const back10 = document.getElementById('back10');
+  const playPauseBtn = document.getElementById('playPause');
+  const forward10 = document.getElementById('forward10');
+  const fullscreenBtn = document.getElementById('fullscreen');
+  const progress = document.getElementById('progress');
+  const progressFilled = document.getElementById('progressFilled');
+  const currentTimeEl = document.getElementById('currentTime');
+  const totalTimeEl = document.getElementById('totalTime');
+  const playPausePath = document.getElementById('playPausePath');
+
+  Player.initFilmePlayer({
+    videoEl: video,
+    overlayEl: overlay,
+    centerPlayEl: centerPlay,
+    controlsEl: controls,
+    playerBoxEl: playerBox,
+    backBtn: back10,
+    playPauseBtn: playPauseBtn,
+    forwardBtn: forward10,
+    fullscreenBtn: fullscreenBtn,
+    progressEl: progress,
+    progressFilledEl: progressFilled,
+    currentTimeEl: currentTimeEl,
+    totalTimeEl: totalTimeEl,
+    titleDisplay: document.getElementById('titleDisplay')
+  });
+}
+
+// ===== RENDERIZAR PÁGINA =====
+function renderFilme(filme) {
+  document.title = `${filme.nome} — PipocaFlix`;
+  const layout = document.getElementById('filme-layout');
+
+  // Elenco
+  const elencoHtml = filme.elencoNome && filme.elencoNome.length
+    ? `<div class="elenco-section">
+        <h3>🌟 Elenco</h3>
+        <div class="actors-container">
+          ${filme.elencoNome.map((nome, i) => {
+            const foto = filme.elencoFoto[i] || '';
+            return foto ? `<div class="actor" title="${nome}"><img src="${foto}" alt="${nome}" loading="lazy"/></div>` : '';
+          }).join('')}
+        </div>
+      </div>`
+    : '';
+
+  // Trailer
+  let trailerHtml = '';
+  if (filme.trailer) {
+    let trailerUrl = filme.trailer;
+    // Converte link YouTube em embed
+    const ytMatch = trailerUrl.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([^&\n?#]+)/);
+    if (ytMatch) {
+      trailerUrl = `https://www.youtube.com/embed/${ytMatch[1]}`;
+    }
+    trailerHtml = `
+      <div class="trailer-section">
+        <h3>🎞️ Trailer</h3>
+        <div class="trailer-container">
+          <iframe src="${trailerUrl}" title="Trailer Oficial" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    `;
+  }
+
+  layout.innerHTML = `
+    <div class="breadcrumb">
+      <a href="index.html">🏠 Início</a>
+      <span>›</span>
+      <a href="index.html">Filmes</a>
+      <span>›</span>
+      <span>${filme.nome}</span>
+    </div>
+
+    <div class="filme-top">
+      <div class="poster-wrapper">
+        ${filme.capa ? `<img src="${filme.capa}" class="filme-poster" alt="${filme.nome}" />` : ''}
+      </div>
+      <div class="filme-info">
+        <h1>${filme.nome}</h1>
+        <div class="meta-row">
+          ${filme.ano ? `<span class="meta-chip">📅 ${filme.ano}</span>` : ''}
+          ${filme.duracao ? `<span class="meta-chip">⏱️ ${filme.duracao}</span>` : ''}
+          ${filme.categoria ? `<span class="meta-chip highlight">🎭 ${filme.categoria}</span>` : ''}
+          ${filme.audio ? `<span class="meta-chip">🔊 ${filme.audio}</span>` : ''}
+        </div>
+        ${filme.sinopse ? `
+          <div class="sinopse-box">
+            <h3>📝 Sinopse</h3>
+            <p>${filme.sinopse}</p>
+          </div>
+        ` : ''}
+
+        <!-- Botão desbloquear -->
+        <button id="btnDesbloquear">🔓 Clique 3 vezes para desbloquear o player</button>
+        <div class="click-progress">
+          <div class="click-dot" id="dot1"></div>
+          <div class="click-dot" id="dot2"></div>
+          <div class="click-dot" id="dot3"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ad antes do player -->
+    <div style="display:flex;justify-content:center;margin:1rem 0;">
+      <div id="container-cccc7245f0c46289c4b3a2911da39bca-pre"></div>
+    </div>
+
+    <!-- Player -->
+    <div class="player-container" id="playerBox" style="display:none;">
+      <video id="video"
+        ${filme.capa ? `poster="${filme.capa}"` : ''}
+        preload="metadata">
+      </video>
+
+      <div class="overlay" id="overlay">
+        <div style="color:#fff;font-size:1rem;font-weight:bold;text-shadow:0 2px 10px rgba(0,0,0,.8);">▶ Clique para reproduzir</div>
+      </div>
+
+      <button id="centerPlay">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+
+      <div class="controls hidden" id="controls">
+        <div class="buttons">
+          <button class="control-btn" id="back10">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M11 18V6l-8 6 8 6zm2-12h8v2h-8zm0 6h6v2h-6z"/>
+            </svg>
+          </button>
+          <button class="control-btn" id="playPause">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path id="playPausePath" d="M8 5v14l11-7z"/>
+            </svg>
+          </button>
+          <button class="control-btn" id="forward10">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M13 6v12l8-6-8-6zm-2 12H3v-2h8zm0-6H5v-2h6z"/>
+            </svg>
+          </button>
+          <div class="title-display" id="titleDisplay">${filme.nome}</div>
+          <button class="control-btn" id="fullscreen">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M4 4h6v2H6v4H4V4zm14 0v6h-2V6h-4V4h6zm0 14h-6v-2h4v-4h2v6zm-14 0v-6h2v4h4v2H4z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="progress-container">
+          <span class="time" id="currentTime">0:00</span>
+          <div class="progress" id="progress">
+            <div class="progress-filled" id="progressFilled"></div>
+          </div>
+          <span class="time" id="totalTime">0:00</span>
+        </div>
+      </div>
+    </div>
+
+    ${elencoHtml}
+    ${trailerHtml}
+  `;
+
+  // ===== LÓGICA DO BOTÃO DESBLOQUEAR (EXATAMENTE COMO ESPECIFICADO) =====
+  let clickCount = 0;
+  const btn = document.getElementById('btnDesbloquear');
+  const playerBox = document.getElementById('playerBox');
+  const video = document.getElementById('video');
+
+  btn.addEventListener('click', () => {
+    clickCount++;
+    window.open(Player.SMARTLINK, "_blank");
+
+    document.getElementById('dot' + clickCount)?.classList.add('active');
+
+    if (clickCount < 3) {
+      btn.textContent = `🔓 Clique ${3 - clickCount} vez${3 - clickCount === 1 ? '' : 'es'} restantes para desbloquear`;
+    } else {
+      btn.textContent = '✅ Player Desbloqueado!';
+      btn.disabled = true;
+      playerBox.style.display = 'block';
+
+      // Carrega o link do vídeo apenas agora (proteção anti-scrape)
+      if (filme.link) {
+        video.src = filme.link;
+        video.load();
+      }
+
+      // Rola até o player
+      setTimeout(() => {
+        playerBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 200);
+    }
+  });
+
+  // Inicializar player
+  initPlayer(filme);
+}
+
+// ===== CARREGAR DADOS =====
+async function init() {
+  if (!nomeFilme) {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  try {
+    const filmes = await API.getFilmes();
+    const filme = filmes.find(f => normalizar(f.nome) === normalizar(nomeFilme));
+
+    document.getElementById('loading-filme').remove();
+
+    if (filme) {
+      renderFilme(filme);
+    } else {
+      document.getElementById('filme-layout').innerHTML = `
+        <div class="no-content" style="padding: 5rem 2rem;">
+          <div style="font-size:3rem; margin-bottom:1rem;">😕</div>
+          <h3>Filme não encontrado</h3>
+          <p>Verifique o nome ou <a href="index.html" style="color:var(--red-primary)">volte ao início</a>.</p>
+        </div>
+      `;
+    }
+  } catch (err) {
+    console.error('[PipocaFlix] Erro:', err);
+    document.getElementById('loading-filme').innerHTML = `
+      <div style="text-align:center;padding:3rem;color:var(--text-muted);">
+        <div style="font-size:2rem">⚠️</div>
+        <p>Erro ao carregar. <a href="javascript:location.reload()" style="color:var(--red-primary)">Tentar novamente</a></p>
+      </div>
+    `;
+  }
+}
+
+init();
+</script>
+</body>
+</html>
